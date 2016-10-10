@@ -1,0 +1,8 @@
+Manifest-Version: 1.0
+Implementation-Title: springmvc
+Implementation-Version: 1.1-SNAPSHOT
+Implementation-Vendor-Id: com.springmvc
+Build-Jdk: 1.7.0_51
+Built-By: 45595
+Created-By: IntelliJ IDEA
+

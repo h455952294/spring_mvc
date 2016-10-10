@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:c="http://www.springframework.org/schema/c"
+    xmlns:p="http://www.springframework.org/schema/p"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:util="http://www.springframework.org/schema/util"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:tx="http://www.springframework.org/schema/tx"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        				http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+        				http://www.springframework.org/schema/context
+        				http://www.springframework.org/schema/context/spring-context-4.0.xsd
+        				http://www.springframework.org/schema/util
+        				http://www.springframework.org/schema/util/spring-util-4.0.xsd
+        				http://www.springframework.org/schema/aop
+        				http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+        				http://www.springframework.org/schema/tx
+        				http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
+        				
+   <!-- 配置数据访问的模版DAO -->
+   <!--<bean id="daoTemplate" abstract="true" lazy-init="true" p:sessionFactory-ref="sessionFactory"/>-->
+   <bean id="daoTemplate" abstract="true" lazy-init="true" >
+       <property name="sessionFactory" ref="sessionFactory"></property>
+   </bean>
+
+    <!-- 配置主键生成器DAO -->
+    <bean id="generatorDao" class="com.core.dao.impl.GeneratorDaoImpl"
+          parent="daoTemplate"/>
+
+   <!-- ############### 配置身份管理模块数据访问bean ################# -->
+   <bean id="userDao" class="com.newSpring.dao.impl.UserDaoImple"
+         parent="daoTemplate"/>
+
+</beans>

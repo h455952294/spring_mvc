@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:c="http://www.springframework.org/schema/c"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:task="http://www.springframework.org/schema/task"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        				http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+        				http://www.springframework.org/schema/context
+        				http://www.springframework.org/schema/context/spring-context-4.0.xsd
+        				http://www.springframework.org/schema/util
+        				http://www.springframework.org/schema/util/spring-util-4.0.xsd
+        				http://www.springframework.org/schema/aop
+        				http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+        				http://www.springframework.org/schema/tx
+        				http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+        				http://www.springframework.org/schema/task
+        				http://www.springframework.org/schema/task/spring-task-4.0.xsd">
+
+       <!-- 配置组件扫描： 到基础包下扫描用@Service @Repository @Controller @Component注解的bean, 扫描到后交由Spring4容器管理-->
+       <context:component-scan base-package="com.newSpring" use-default-filters="false">
+              <!-- 采用annotation的方式扫描指定bean -->
+              <context:include-filter type="annotation" expression="org.springframework.stereotype.Service"/>
+              <!-- 采用aspectj表达式的方式扫描四种注解的bean
+              <context:include-filter type="aspectj" expression="org.fkjava.oa.*.*.service.impl.*"/>
+              -->
+              <!-- 采用regex正则表达式的方式扫描四种注解的bean
+              <context:include-filter type="regex" expression="org.fkjava.oa.*"/>
+              -->
+              <!-- 采用assignable的方式扫指定的bean
+              <context:include-filter type="assignable" expression="org.fkjava.oa.admin.identity.service.impl.IdentityServiceImpl"/>
+              -->
+       </context:component-scan>
+
+       <!--数据源-->
+       <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close"/>
+       <!--配置sessionFactory-->
+       <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean"
+             p:dataSource-ref="dataSource">
+              <!-- 配置持久化类采用包扫描方式 -->
+              <property name="packagesToScan">
+                     <value>
+                            com.newSpring.domain
+                     </value>
+              </property>
+       </bean>
+       <!--配置事物-->
+       <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager"
+             p:sessionFactory-ref="sessionFactory"
+               />
+
+       <tx:annotation-driven transaction-manager="transactionManager"/>
+
+       <!-- 配置日志切面类 -->
+       <bean id="logAdvice" class="com.core.aop.LogAdvice"></bean>
+       <!-- 配置Spring4对aspectj做自动代理 -->
+       <aop:aspectj-autoproxy/>
+
+       <!-- 开启annotation注解任务 -->
+       <task:annotation-driven/>
+       <!--<bean id="templeDao" abstract="true" lazy-init="true"  p:sessionFactory-ref="sessionFactory"/>-->
+
+</beans>
